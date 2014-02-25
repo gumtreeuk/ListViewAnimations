@@ -14,6 +14,14 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <provider
+            android:name="com.haarman.listviewanimations.cursor.AppProvider"
+            android:authorities="mydatabase.db"
+            android:exported="false"
+            android:label="Sync User Data"
+            android:logo="@drawable/ic_launcher"
+            android:multiprocess="true"
+            android:syncable="true"/>
         <activity android:name="com.haarman.listviewanimations.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,6 +53,9 @@
         <activity
             android:name="com.haarman.listviewanimations.itemmanipulationexamples.ExpandableListItemActivity"
             android:label="@string/expandablelistitemadapter" />
+        <activity
+            android:name="com.haarman.listviewanimations.CursorListActivity"
+            android:label="Cursor list" />
     </application>
 
 </manifest>

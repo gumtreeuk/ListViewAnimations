@@ -15,11 +15,6 @@
  */
 package com.haarman.listviewanimations;
 
-import java.util.ArrayList;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -29,7 +24,6 @@ import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.ServiceConnection;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -42,14 +36,19 @@ import com.android.vending.billing.IInAppBillingService;
 import com.haarman.listviewanimations.appearanceexamples.AppearanceExamplesActivity;
 import com.haarman.listviewanimations.itemmanipulationexamples.ItemManipulationsExamplesActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class MainActivity extends Activity {
 
 	@SuppressLint("InlinedApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		if (Build.VERSION.SDK_INT >= 19) {
+		/*if (Build.VERSION.SDK_INT >= 19) {
 			getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-		}
+		}*/
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
@@ -95,6 +94,11 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(this, GoogleCardsActivity.class);
 		startActivity(intent);
 	}
+
+    public void onCursorExampleClicked(View view) {
+        Intent intent = new Intent(this, CursorListActivity.class);
+        startActivity(intent);
+    }
 
 	public void onGridViewExampleClicked(View view) {
 		Intent intent = new Intent(this, GridViewActivity.class);
