@@ -22,7 +22,6 @@ public abstract class ExpandableCursorListAdapter extends CursorAdapter {
     private static final int DEFAULTTITLEPARENTRESID = 10000;
     private static final int DEFAULTCONTENTPARENTRESID = 10001;
 
-    private Context mContext;
     private int mViewLayoutResId;
     private int mTitleParentResId;
     private int mContentParentResId;
@@ -31,10 +30,10 @@ public abstract class ExpandableCursorListAdapter extends CursorAdapter {
 
     private int mLimit;
     private Map<Long, View> mExpandedViews;
+    private OnExpandableButtonToggleListener listener;
 
     public ExpandableCursorListAdapter(Context context, Cursor c) {
         super(context, c, false);
-        mContext = context;
         mTitleParentResId = DEFAULTTITLEPARENTRESID;
         mContentParentResId = DEFAULTCONTENTPARENTRESID;
         mExpandedViews = new HashMap<Long, View>();
@@ -43,7 +42,6 @@ public abstract class ExpandableCursorListAdapter extends CursorAdapter {
 
     public ExpandableCursorListAdapter(Context context, Cursor c, int actionViewResId, int layoutResId, int titleParentResId, int contentParentResId) {
         super(context, c, false);
-        mContext = context;
         mViewLayoutResId = layoutResId;
         mTitleParentResId = titleParentResId;
         mContentParentResId = contentParentResId;
@@ -81,11 +79,18 @@ public abstract class ExpandableCursorListAdapter extends CursorAdapter {
             viewHolder.titleParent.addView(titleView);
 
             if (mActionViewResId == 0) {
-                view.setOnClickListener(new TitleViewOnClickListener(viewHolder.contentParent));
+                view.setOnClickListener(new TitleViewOnClickListener(viewHolder.contentParent){
+
+                });
             } else {
-                view.findViewById(mActionViewResId).setOnClickListener(new TitleViewOnClickListener(viewHolder.contentParent){
-
-
+                view.findViewById(mActionViewResId).setOnClickListener(new TitleViewOnClickListener(viewHolder.contentParent) {
+                    @Override
+                    public void onTitleViewClicked(View view, boolean isVisible) {
+                        super.onTitleViewClicked(view, isVisible);
+                        if (listener!=null){
+                            listener.onExpandedViewToggled(view, isVisible);
+                        }
+                    }
                 });
             }
         }
@@ -123,6 +128,14 @@ public abstract class ExpandableCursorListAdapter extends CursorAdapter {
 
     public abstract View getContentView(View convertView, ViewGroup parent, Cursor cursor);
 
+    public void setOnExpandableButtonToggleListener(OnExpandableButtonToggleListener listener){
+        this.listener = listener;
+    }
+
+
+    public interface OnExpandableButtonToggleListener{
+        void onExpandedViewToggled(View view, boolean isVisible);
+    }
 
     private class TitleViewOnClickListener implements View.OnClickListener {
 
@@ -160,6 +173,11 @@ public abstract class ExpandableCursorListAdapter extends CursorAdapter {
                     mExpandedViews.put((Long) mContentParent.getTag(), parent);
                 }
             }
+
+            onTitleViewClicked(view, isVisible);
+        }
+
+        public void onTitleViewClicked(View view, boolean isVisible) {
         }
     }
 
